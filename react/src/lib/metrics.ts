@@ -1,18 +1,22 @@
 import axios from 'axios';
+
 const API_BASE_URL = 'http://localhost:3000/api/metrics';
 
-export const getLiveIncidentCount = async () => {
+
+
+export const getScorecardMetrics = async () => {
 
   try {
 
-    const response = await axios.get(`${API_BASE_URL}/total-incidents`);
-    return response.data;
+    const response = await axios.get(`${API_BASE_URL}/scorecard`);
+
+    return response.data; 
 
   } catch (error) {
 
-    console.error('Error fetching incidents from NestJS:', error);
+    console.error('Error fetching scorecard metrics:', error);
 
-    return { success: false, totalOpenIncidents: 0 };
+    return { success: false, data: { m1: 0, m6: 0, m10: 0 } };
 
   }
 

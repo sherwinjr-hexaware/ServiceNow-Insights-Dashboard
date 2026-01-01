@@ -1,41 +1,26 @@
 import { HTMLAttributeAnchorTarget } from 'react';
-
 import { SxProps } from '@mui/material';
-
 import paths, { rootPaths } from './paths';
 
 export interface SubMenuItem {
 
   name: string;
-
   pathName: string;
-
   key?: string;
-
   selectionPrefix?: string;
-
   path?: string;
-
   target?: HTMLAttributeAnchorTarget;
-
   active?: boolean;
-
   icon?: string;
-
   iconSx?: SxProps;
-
   items?: SubMenuItem[];
 
 }
 
 export interface MenuItem {
-
   id: string;
-
-  key?: string; // Used for translation/locale
-
+  key?: string; 
   subheader?: string;
-
   icon: string;
 
   target?: HTMLAttributeAnchorTarget;
@@ -61,15 +46,10 @@ const sitemap: MenuItem[] = [
       {
 
         name: 'Main Dashboard',
-
         path: rootPaths.root,
-
         pathName: 'dashboard',
-
         icon: 'material-symbols:query-stats-rounded',
-
         active: true,
-
         selectionPrefix: rootPaths.root,
 
       },
@@ -77,11 +57,8 @@ const sitemap: MenuItem[] = [
       {
 
         name: 'Users',
-
         path: paths.users,
-
         pathName: 'users',
-
         icon: 'material-symbols:account-box-outline',
 
         active: true,
@@ -89,6 +66,8 @@ const sitemap: MenuItem[] = [
         selectionPrefix: '/users',
 
       },
+
+
 
       {
 

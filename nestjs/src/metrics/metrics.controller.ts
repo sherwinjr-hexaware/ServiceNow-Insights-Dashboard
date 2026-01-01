@@ -8,11 +8,11 @@ export class MetricsController {
 
   constructor(private readonly metricsService: MetricsService) {}
 
-  @Get('total-incidents')
+  @Get('scorecard')
 
-  getTotalIncidents() {
+  async getScorecard() {
 
-    return this.metricsService.getOpenIncidentsCount();
+    return await this.metricsService.getScorecardMetrics();
 
   }
 

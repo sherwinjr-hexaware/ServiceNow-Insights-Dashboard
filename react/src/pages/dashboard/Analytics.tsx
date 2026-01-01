@@ -1,50 +1,39 @@
 import { useEffect, useState } from 'react';
-
 import Grid from '@mui/material/Grid';
-
-import Paper from '@mui/material/Paper';
-
-import Typography from '@mui/material/Typography';
-
 import {
-
-  analyticKPIs,
-
   topCampaignsChartData,
-
   userByCountryData,
-
   userEngagementChartData,
 
 } from 'data/dashboard';
-
 import AnalyticKPI from 'components/sections/dashboards/analytics/kpi/AnalyticKPI';
-
 import TopCampaigns from 'components/sections/dashboards/analytics/top-campaigns/TopCampaigns';
-
 import UserByCountry from 'components/sections/dashboards/analytics/user-by-country/UserByCountry';
-
 import UserEngagement from 'components/sections/dashboards/analytics/user-engagement/UserEngagement';
-
 import ProPlanCTA from 'components/sections/dashboards/analytics/cta/ProPlanCTA';
-
-import { getLiveIncidentCount } from '../../lib/metrics';
-
+import { getScorecardMetrics } from '../../lib/metrics';
 const Analytics = () => {
-
-  const [incidentCount, setIncidentCount] = useState<number>(0);
-
   const [loading, setLoading] = useState(true);
+
+  const [metrics, setMetrics] = useState({
+
+    m1: 0,
+
+    m6: 0,
+
+    m10: 0,
+
+  });
 
   useEffect(() => {
 
-    const fetchIncidents = async () => {
+    const fetchScorecard = async () => {
 
-      const data = await getLiveIncidentCount();
+      const res = await getScorecardMetrics();
 
-      if (data.success) {
+      if (res.success) {
 
-        setIncidentCount(data.totalOpenIncidents);
+        setMetrics(res.data);
 
       }
 
@@ -52,18 +41,69 @@ const Analytics = () => {
 
     };
 
-    fetchIncidents();
+    fetchScorecard();
 
-    const interval = setInterval(fetchIncidents, 300000);
+    const interval = setInterval(fetchScorecard, 300000);
 
     return () => clearInterval(interval);
 
   }, []);
 
+
+  const analyticKPIs = [
+
+    {
+
+      title: 'Active Incidents',
+
+      value: loading ? '...' : metrics.m1, 
+
+      icon: { name: 'mdi:alert-circle-outline', color: 'primary' },
+
+      link: { prefix: 'View', text: 'active incidents', url: '#' },
+
+    },
+
+    {
+
+      title: 'Unassigned Incidents',
+
+      value: loading ? '...' : metrics.m6, 
+
+      icon: { name: 'mdi:account-off-outline', color: 'warning' },
+
+      link: { prefix: 'View', text: 'unassigned incidents', url: '#' },
+
+    },
+
+    {
+
+      title: 'Stale Incidents',
+
+      value: loading ? '...' : metrics.m10, 
+
+      icon: { name: 'mdi:clock-alert-outline', color: 'error' },
+
+      link: { prefix: 'View', text: 'stale incidents', url: '#' },
+
+    },
+
+    {
+
+      title: 'Active Referrals',
+
+      value: 470,
+
+      icon: { name: 'mdi:link-variant', color: 'info' },
+
+      link: { prefix: 'See all', text: 'referrals', url: '#' },
+
+    },
+
+  ];
+
   return (
 <Grid container spacing={3}>
-
-      {/* Existing KPIs */}
 
       {analyticKPIs.map((kpi) => (
 <Grid key={kpi.title} size={{ xs: 6, md: 3, xl: 2 }}>
@@ -72,28 +112,6 @@ const Analytics = () => {
 
       ))}
 
-      {/* ✅ Live ServiceNow KPI */}
-<Grid size={{ xs: 12, md: 4 }}>
-<Paper elevation={3} sx={{ p: 3, textAlign: 'center' }}>
-<Typography variant="h6" color="text.secondary">
-
-            Live Open Incidents
-</Typography>
-<Typography
-
-            variant="h2"
-
-            sx={{ fontWeight: 'bold', color: '#1976d2' }}
->
-
-            {loading ? '...' : incidentCount}
-</Typography>
-<Typography variant="caption">
-
-            ServiceNow (Real-Time)
-</Typography>
-</Paper>
-</Grid>
 <Grid size={{ xs: 12, lg: 7 }}>
 <UserEngagement data={userEngagementChartData} />
 </Grid>

@@ -18,15 +18,12 @@ const App = () => {
 
   const { configDispatch } = useSettingsContext();
 
-  // Scroll to top on route change
-
   useEffect(() => {
 
     window.scrollTo(0, 0);
 
   }, [pathname]);
 
-  // Refresh settings configuration on mount
 
   useLayoutEffect(() => {
 
@@ -37,10 +34,9 @@ const App = () => {
   return (
 <AuthProvider>
 
-      {/* The Outlet renders the matched child route from router.tsx */}
+   
 <Outlet />
 
-      {/* Template specific UI components */}
 <SettingPanel />
 <SettingPanelToggler />
 </AuthProvider>

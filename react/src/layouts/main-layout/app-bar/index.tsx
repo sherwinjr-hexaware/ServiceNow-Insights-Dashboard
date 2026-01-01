@@ -1,21 +1,12 @@
 import { Box, Button, Stack, paperClasses, Typography } from '@mui/material';
-
 import MuiAppBar from '@mui/material/AppBar';
-
 import Toolbar from '@mui/material/Toolbar';
-
 import { useBreakpoints } from 'providers/BreakpointsProvider';
-
 import { useSettingsContext } from 'providers/SettingsProvider';
-
 import { useAuth } from 'providers/AuthProvider'; 
-
 import IconifyIcon from 'components/base/IconifyIcon';
-
 import Logo from 'components/common/Logo';
-
 import AppbarActionItems from '../common/AppbarActionItems';
-
 import SearchBox, { SearchBoxButton } from '../common/search-box/SearchBox';
 
 const AppBar = () => {
@@ -28,7 +19,7 @@ const AppBar = () => {
 
   } = useSettingsContext();
 
-  const { user } = useAuth(); // Access the Supabase user state
+  const { user } = useAuth();
 
   const { up } = useBreakpoints();
 
@@ -51,7 +42,7 @@ const AppBar = () => {
 
         borderColor: 'divider',
 
-        bgcolor: 'background.paper', // Ensures text is readable
+        bgcolor: 'background.paper',
 
         [`& .${paperClasses.root}`]: {
 

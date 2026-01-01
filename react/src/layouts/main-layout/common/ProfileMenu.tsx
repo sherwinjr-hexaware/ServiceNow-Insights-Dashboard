@@ -1,35 +1,22 @@
 import { useState, MouseEvent } from 'react';
 
 import { 
-
   Menu, MenuItem, Typography, Box, Divider, 
-
   Stack, ListItemIcon, listItemIconClasses, paperClasses, listClasses 
-
 } from '@mui/material';
 
 import { useAuth } from 'providers/AuthProvider';
-
 import { supabase } from 'lib/supabase';
-
 import IconifyIcon from 'components/base/IconifyIcon';
-
 import StatusAvatar from 'components/base/StatusAvatar';
-
 import Button from '@mui/material/Button';
-
 const ProfileMenu = () => {
 
   const { user } = useAuth();
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
   const open = Boolean(anchorEl);
-
   const handleOpen = (event: MouseEvent<HTMLElement>) => {
-
     setAnchorEl(event.currentTarget);
-
   };
 
   const handleClose = () => {
@@ -37,13 +24,9 @@ const ProfileMenu = () => {
     setAnchorEl(null);
 
   };
-
   const handleLogout = async () => {
-
     handleClose();
-
     await supabase.auth.signOut();
-
   };
 
   const userInitial = user?.email?.[0].toUpperCase() || 'U';
@@ -53,21 +36,15 @@ const ProfileMenu = () => {
   return (
 <>
 <Button
-
         color="neutral"
-
         variant="text"
-
         onClick={handleOpen}
-
         sx={{ height: 44, width: 44, borderRadius: '50%' }}
 >
 <StatusAvatar
 
           alt={userName}
-
           status="online"
-
           sx={{ 
 
             width: 40, height: 40, border: 2, 
@@ -87,15 +64,10 @@ const ProfileMenu = () => {
 <Menu
 
         anchorEl={anchorEl}
-
         open={open}
-
         onClose={handleClose}
-
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-
         sx={{
 
           [`& .${paperClasses.root}`]: { minWidth: 280, mt: 1.5 },

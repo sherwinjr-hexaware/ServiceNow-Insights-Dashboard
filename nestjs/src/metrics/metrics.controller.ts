@@ -9,12 +9,17 @@ export class MetricsController {
   constructor(private readonly metricsService: MetricsService) {}
 
   @Get('scorecard')
-
   async getScorecard() {
-
     return await this.metricsService.getScorecardMetrics();
 
   }
+  @Get('charts')
+  async getCharts() {
+    return await this.metricsService.getChartMetrics();
+
+  }
+
+
 
 }
  

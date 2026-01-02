@@ -1,126 +1,116 @@
 import { useEffect, useState } from 'react';
-import Grid from '@mui/material/Grid';
-import {
-  topCampaignsChartData,
-  userByCountryData,
-  userEngagementChartData,
 
-} from 'data/dashboard';
+import Grid from '@mui/material/Grid';
+
 import AnalyticKPI from 'components/sections/dashboards/analytics/kpi/AnalyticKPI';
-import TopCampaigns from 'components/sections/dashboards/analytics/top-campaigns/TopCampaigns';
-import UserByCountry from 'components/sections/dashboards/analytics/user-by-country/UserByCountry';
-import UserEngagement from 'components/sections/dashboards/analytics/user-engagement/UserEngagement';
+
 import ProPlanCTA from 'components/sections/dashboards/analytics/cta/ProPlanCTA';
-import { getScorecardMetrics } from '../../lib/metrics';
+
+import PriorityPie from 'components/charts/PriorityPie';
+
+import CategoryBar from 'components/charts/CategoryBar';
+
+import { getScorecardMetrics, getChartMetrics } from 'lib/metrics';
+
 const Analytics = () => {
+
   const [loading, setLoading] = useState(true);
 
-  const [metrics, setMetrics] = useState({
+  const [metrics, setMetrics] = useState({ m1: 0, m6: 0, m10: 0 });
 
-    m1: 0,
-
-    m6: 0,
-
-    m10: 0,
-
-  });
+  const [charts, setCharts] = useState<any>(null);
 
   useEffect(() => {
 
-    const fetchScorecard = async () => {
+    const fetchAll = async () => {
 
-      const res = await getScorecardMetrics();
+      const [scoreRes, chartRes] = await Promise.all([
 
-      if (res.success) {
+        getScorecardMetrics(),
 
-        setMetrics(res.data);
+        getChartMetrics(),
 
-      }
+      ]);
+
+      if (scoreRes.success) setMetrics(scoreRes.data);
+
+      if (chartRes.success) setCharts(chartRes.data);
 
       setLoading(false);
 
     };
 
-    fetchScorecard();
-
-    const interval = setInterval(fetchScorecard, 300000);
-
-    return () => clearInterval(interval);
+    fetchAll();
 
   }, []);
 
+ 
 
-  const analyticKPIs = [
+  const kpiData = [
 
     {
 
       title: 'Active Incidents',
 
-      value: loading ? '...' : metrics.m1, 
+      value: loading ? '...' : metrics.m1,
 
       icon: { name: 'mdi:alert-circle-outline', color: 'primary' },
 
-      link: { prefix: 'View', text: 'active incidents', url: '#' },
+      link: { prefix: 'View', text: 'active', url: '#' },
 
     },
 
     {
 
-      title: 'Unassigned Incidents',
+      title: 'Unassigned',
 
-      value: loading ? '...' : metrics.m6, 
+      value: loading ? '...' : metrics.m6,
 
       icon: { name: 'mdi:account-off-outline', color: 'warning' },
 
-      link: { prefix: 'View', text: 'unassigned incidents', url: '#' },
+      link: { prefix: 'View', text: 'unassigned', url: '#' },
 
     },
 
     {
 
-      title: 'Stale Incidents',
+      title: 'Stale Data',
 
-      value: loading ? '...' : metrics.m10, 
+      value: loading ? '...' : metrics.m10,
 
       icon: { name: 'mdi:clock-alert-outline', color: 'error' },
 
-      link: { prefix: 'View', text: 'stale incidents', url: '#' },
-
-    },
-
-    {
-
-      title: 'Active Referrals',
-
-      value: 470,
-
-      icon: { name: 'mdi:link-variant', color: 'info' },
-
-      link: { prefix: 'See all', text: 'referrals', url: '#' },
+      link: { prefix: 'View', text: 'stale', url: '#' },
 
     },
 
   ];
 
+  
+
   return (
 <Grid container spacing={3}>
 
-      {analyticKPIs.map((kpi) => (
-<Grid key={kpi.title} size={{ xs: 6, md: 3, xl: 2 }}>
+
+      {kpiData.map((kpi) => (
+<Grid key={kpi.title} size={{ xs: 12, md: 4 }}>
 <AnalyticKPI kpi={kpi} />
 </Grid>
 
       ))}
 
-<Grid size={{ xs: 12, lg: 7 }}>
-<UserEngagement data={userEngagementChartData} />
+
+<Grid size={{ xs: 12, md: 6 }}>
+
+        {charts && <PriorityPie data={charts.priority} />}
 </Grid>
-<Grid size={{ xs: 12, lg: 5 }}>
-<TopCampaigns data={topCampaignsChartData} />
+
+<Grid size={{ xs: 12, md: 6 }}>
+
+        {charts && <CategoryBar data={charts.category} />}
 </Grid>
-<Grid size={{ xs: 12 }}>
-<UserByCountry data={userByCountryData} />
-</Grid>
+
+
 <Grid size={{ xs: 12 }}>
 <ProPlanCTA />
 </Grid>

@@ -1,25 +1,25 @@
-import { Box, Button, Stack, paperClasses, Typography } from '@mui/material';
+import { Box, Button, Stack, Typography, paperClasses } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
+import { useAuth } from 'providers/AuthProvider';
 import { useBreakpoints } from 'providers/BreakpointsProvider';
+import { useRefresh } from 'providers/RefreshProvider';
 import { useSettingsContext } from 'providers/SettingsProvider';
-import { useAuth } from 'providers/AuthProvider'; 
+// Import useRefresh
 import IconifyIcon from 'components/base/IconifyIcon';
 import Logo from 'components/common/Logo';
 import AppbarActionItems from '../common/AppbarActionItems';
 import SearchBox, { SearchBoxButton } from '../common/search-box/SearchBox';
 
 const AppBar = () => {
-
   const {
-
     config: { drawerWidth },
 
     handleDrawerToggle,
-
   } = useSettingsContext();
 
   const { user } = useAuth();
+  const { triggerRefresh } = useRefresh(); // Use the refresh hook
 
   const { up } = useBreakpoints();
 
@@ -28,12 +28,9 @@ const AppBar = () => {
   const upMd = up('md');
 
   return (
-<MuiAppBar
-
+    <MuiAppBar
       position="fixed"
-
       sx={{
-
         width: { md: `calc(100% - ${drawerWidth}px)` },
 
         ml: { md: `${drawerWidth}px` },
@@ -45,18 +42,13 @@ const AppBar = () => {
         bgcolor: 'background.paper',
 
         [`& .${paperClasses.root}`]: {
-
           outline: 'none',
-
         },
-
       }}
->
-<Toolbar variant="appbar" sx={{ px: { xs: 3, md: 5 } }}>
-<Box
-
+    >
+      <Toolbar variant="appbar" sx={{ px: { xs: 3, md: 5 } }}>
+        <Box
           sx={{
-
             display: { xs: 'flex', md: 'none' },
 
             alignItems: 'center',
@@ -64,66 +56,46 @@ const AppBar = () => {
             gap: 1,
 
             pr: 2,
-
           }}
->
-<Button
-
+        >
+          <Button
             color="neutral"
-
             variant="soft"
-
             shape="circle"
-
             aria-label="open drawer"
-
             onClick={handleDrawerToggle}
->
-<IconifyIcon icon="material-symbols:menu-rounded" sx={{ fontSize: 20 }} />
-</Button>
-<Box>
-<Logo showName={upSm} />
-</Box>
-</Box>
-<Stack
-
+          >
+            <IconifyIcon icon="material-symbols:menu-rounded" sx={{ fontSize: 20 }} />
+          </Button>
+          <Box>
+            <Logo showName={upSm} />
+          </Box>
+        </Box>
+        <Stack
           sx={{
-
             alignItems: 'center',
 
             flex: 1,
-
           }}
->
-
+        >
           {upMd ? (
-<SearchBox
-
+            <SearchBox
               sx={{
-
                 width: 1,
 
                 maxWidth: 420,
-
               }}
-
             />
-
           ) : (
-<SearchBoxButton />
-
+            <SearchBoxButton />
           )}
-</Stack>
-<Stack direction="row" spacing={2} alignItems="center">
-
+        </Stack>
+        <Stack direction="row" spacing={2} alignItems="center">
           {upSm && (
-<Typography 
-
-              variant="body2" 
-
-              sx={{ 
-
-                color: 'text.secondary', 
+            <Typography
+              variant="body2"
+              sx={{
+                color: 'text.secondary',
 
                 fontWeight: 600,
 
@@ -131,23 +103,26 @@ const AppBar = () => {
 
                 borderColor: 'divider',
 
-                pr: 2
-
+                pr: 2,
               }}
->
-
+            >
               {user?.email || 'Not Logged In'}
-</Typography>
-
+            </Typography>
           )}
-<AppbarActionItems />
-</Stack>
-</Toolbar>
-</MuiAppBar>
-
+          <Button
+            color="primary"
+            variant="soft"
+            shape="circle"
+            aria-label="refresh data"
+            onClick={triggerRefresh}
+          >
+            <IconifyIcon icon="material-symbols:refresh" sx={{ fontSize: 20 }} />
+          </Button>
+          <AppbarActionItems />
+        </Stack>
+      </Toolbar>
+    </MuiAppBar>
   );
-
 };
 
 export default AppBar;
- 

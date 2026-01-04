@@ -3,7 +3,6 @@ import { SxProps } from '@mui/material';
 import paths, { rootPaths } from './paths';
 
 export interface SubMenuItem {
-
   name: string;
   pathName: string;
   key?: string;
@@ -14,12 +13,11 @@ export interface SubMenuItem {
   icon?: string;
   iconSx?: SxProps;
   items?: SubMenuItem[];
-
 }
 
 export interface MenuItem {
   id: string;
-  key?: string; 
+  key?: string;
   subheader?: string;
   icon: string;
 
@@ -28,13 +26,10 @@ export interface MenuItem {
   iconSx?: SxProps;
 
   items: SubMenuItem[];
-
 }
 
 const sitemap: MenuItem[] = [
-
   {
-
     id: 'pages',
 
     subheader: 'ServiceNow Insights',
@@ -42,20 +37,16 @@ const sitemap: MenuItem[] = [
     icon: 'material-symbols:view-quilt-outline',
 
     items: [
-
       {
-
         name: 'Main Dashboard',
         path: rootPaths.root,
         pathName: 'dashboard',
         icon: 'material-symbols:query-stats-rounded',
         active: true,
         selectionPrefix: rootPaths.root,
-
       },
 
       {
-
         name: 'Users',
         path: paths.users,
         pathName: 'users',
@@ -64,13 +55,9 @@ const sitemap: MenuItem[] = [
         active: true,
 
         selectionPrefix: '/users',
-
       },
 
-
-
       {
-
         name: 'Account',
 
         key: 'account',
@@ -84,15 +71,11 @@ const sitemap: MenuItem[] = [
         icon: 'material-symbols:admin-panel-settings-outline-rounded',
 
         selectionPrefix: '/account',
-
       },
-
     ],
-
   },
 
   {
-
     id: 'auth-group',
 
     subheader: 'Authentication',
@@ -100,9 +83,7 @@ const sitemap: MenuItem[] = [
     icon: 'material-symbols:lock-outline',
 
     items: [
-
       {
-
         name: 'Login',
 
         icon: 'material-symbols:login',
@@ -114,11 +95,9 @@ const sitemap: MenuItem[] = [
         active: true,
 
         selectionPrefix: '/auth',
-
       },
 
       {
-
         name: 'Sign up',
 
         icon: 'material-symbols:person-add-outline',
@@ -130,14 +109,9 @@ const sitemap: MenuItem[] = [
         active: true,
 
         selectionPrefix: '/auth',
-
       },
-
     ],
-
   },
-
 ];
 
 export default sitemap;
- 

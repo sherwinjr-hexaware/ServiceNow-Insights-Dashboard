@@ -56,3 +56,10 @@ export function getColor(colorVar: string) {
 
   return computedStyle.getPropertyValue(variableName).trim() || colorVar;
 }
+
+export const echartOptions = {
+  tooltip: {
+    trigger: 'axis',
+    formatter: (params: any) => tooltipFormatterList(params, true),
+  },
+};

@@ -1,9 +1,11 @@
-import { Avatar, Link, Paper, Typography } from '@mui/material';
+import { Avatar, Link, Paper, Skeleton, Typography } from '@mui/material';
+// Import Skeleton
 import { formatNumber } from 'lib/utils';
 import { AnalyticKPIData } from 'types/dashboard';
 import IconifyIcon from 'components/base/IconifyIcon';
 
-const AnalyticKPI = ({ kpi }: { kpi: AnalyticKPIData }) => {
+const AnalyticKPI = ({ kpi, isLoading }: { kpi: AnalyticKPIData; isLoading: boolean }) => {
+  // Add isLoading prop
   const { title, link, value, icon } = kpi;
 
   return (
@@ -22,7 +24,7 @@ const AnalyticKPI = ({ kpi }: { kpi: AnalyticKPIData }) => {
           whiteSpace: 'nowrap',
         }}
       >
-        {title}
+        {isLoading ? <Skeleton width="60%" /> : title}
       </Typography>
 
       <Avatar
@@ -35,17 +37,27 @@ const AnalyticKPI = ({ kpi }: { kpi: AnalyticKPIData }) => {
           mb: 1,
         }}
       >
-        <IconifyIcon
-          icon={icon.name}
-          sx={{
-            fontSize: 32,
-            color: `${icon.color}.main`,
-          }}
-        />
+        {isLoading ? (
+          <Skeleton variant="circular" width={32} height={32} />
+        ) : (
+          <IconifyIcon
+            icon={icon.name}
+            sx={{
+              fontSize: 32,
+              color: `${icon.color}.main`,
+            }}
+          />
+        )}
       </Avatar>
 
       <Typography variant="h4" sx={{ fontWeight: 500, mb: 3 }}>
-        {typeof value === 'number' ? formatNumber(value) : value}
+        {isLoading ? (
+          <Skeleton width="40%" />
+        ) : typeof value === 'number' ? (
+          formatNumber(value)
+        ) : (
+          value
+        )}
       </Typography>
 
       <Typography

@@ -9,11 +9,10 @@ import { countries } from 'data/countries';
 import { Country } from 'types/countries';
 import IconifyIcon from 'components/base/IconifyIcon';
 
-interface CountrySelectProps
-  extends Omit<
-    AutocompleteProps<Country, undefined, boolean, undefined>,
-    'options' | 'renderInput'
-  > {
+interface CountrySelectProps extends Omit<
+  AutocompleteProps<Country, undefined, boolean, undefined>,
+  'options' | 'renderInput'
+> {
   fields?: {
     flag?: boolean;
     name?: boolean;

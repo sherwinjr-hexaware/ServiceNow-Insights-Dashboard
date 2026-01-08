@@ -5,6 +5,7 @@ import AuthLayout from 'layouts/auth-layout';
 import MainLayout from 'layouts/main-layout';
 import Page404 from 'pages/errors/Page404';
 import { ProtectedRoute } from 'components/auth/ProtectedRoute';
+import { PublicRoute } from 'components/auth/PublicRoute';
 import PageLoader from 'components/loading/PageLoader';
 import paths, { rootPaths } from './paths';
 
@@ -50,9 +51,11 @@ export const routes: RouteObject[] = [
         path: rootPaths.authRoot,
 
         element: (
-          <AuthLayout>
-            <SuspenseOutlet />
-          </AuthLayout>
+          <PublicRoute>
+            <AuthLayout>
+              <SuspenseOutlet />
+            </AuthLayout>
+          </PublicRoute>
         ),
         children: [
           { path: 'login', element: <Login /> },

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { getChartMetrics, getScorecardMetrics, getTopCallersMetrics } from 'lib/metrics';
-// Import TopCallersTable
 import { useRefresh } from 'providers/RefreshProvider';
 import CategoryBar from 'components/charts/CategoryBar';
 import CriticalBacklogChart from 'components/charts/CriticalBacklogChart';
@@ -24,28 +23,30 @@ const Analytics = () => {
     slaBreach: [],
     criticalBacklog: 0,
   });
-  const [topCallersData, setTopCallersData] = useState<any[]>([]); // New state for top callers
-  const { refreshCount } = useRefresh();
-
+  const [topCallersData, setTopCallersData] = useState<any[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const refreshCount = useRefresh();
   useEffect(() => {
     const fetchAll = async () => {
       setLoading(true);
-      const [scoreRes, chartRes, topCallersRes] = await Promise.all([
-        getScorecardMetrics(),
-        getChartMetrics(),
-        getTopCallersMetrics(), // Fetch top callers metrics
-      ]);
-
-      if (scoreRes.success) setMetrics(scoreRes.data);
-      if (chartRes.success) setCharts(chartRes.data);
-      if (topCallersRes.success) setTopCallersData(topCallersRes.data.topMonthlyCallers); // Set top callers data
-
-      setLoading(false);
+      setError(null);
+      try {
+        const [scoreRes, chartRes, topCallersRes] = await Promise.all([
+          getScorecardMetrics(),
+          getChartMetrics(),
+          getTopCallersMetrics(),
+        ]);
+        if (scoreRes.success) setMetrics(scoreRes.data);
+        if (chartRes.success) setCharts(chartRes.data);
+        if (topCallersRes.success) setTopCallersData(topCallersRes.data.topMonthlyCallers);
+      } catch (err: any) {
+        setError(err.message || 'Failed to fetch analytics metrics.');
+      } finally {
+        setLoading(false);
+      }
     };
-
     fetchAll();
   }, [refreshCount]);
-
   const kpiData = [
     {
       title: 'Total Open Incidents',
@@ -66,49 +67,43 @@ const Analytics = () => {
       link: { prefix: 'View', text: 'stale', url: '#' },
     },
   ];
-
   return (
     <Grid container spacing={3}>
+      {error && (
+        <Grid size={12}>
+          <div style={{ color: 'red' }}>Error: {error}</div>
+        </Grid>
+      )}
       {kpiData.map((kpi) => (
         <Grid key={kpi.title} size={{ xs: 12, md: 4 }}>
           <AnalyticKPI kpi={kpi} isLoading={loading} />
         </Grid>
       ))}
-
       <Grid size={{ xs: 12, md: 6 }}>
         <PriorityPie data={charts.priority} isLoading={loading} />
       </Grid>
-
       <Grid size={{ xs: 12, md: 6 }}>
         <CategoryBar data={charts.category} isLoading={loading} />
       </Grid>
-
       <Grid size={{ xs: 12, md: 6 }}>
         <GroupWorkload data={charts.group} isLoading={loading} />
       </Grid>
-
       <Grid size={{ xs: 12, md: 6 }}>
         <StateFunnel data={charts.state} isLoading={loading} />
       </Grid>
-
       <Grid size={{ xs: 12, md: 6 }}>
         <SlaBreachChart data={charts.slaBreach} isLoading={loading} />
       </Grid>
-
       <Grid size={{ xs: 12, md: 6 }}>
         <CriticalBacklogChart value={charts.criticalBacklog} isLoading={loading} />
       </Grid>
-
-      {/* New Grid item for TopCallersTable */}
       <Grid size={{ xs: 12, md: 6 }}>
         <TopCallersTable data={topCallersData} loading={loading} />
       </Grid>
-
-      <Grid size={{ xs: 12 }}>
+      <Grid size={12}>
         <ProPlanCTA />
       </Grid>
     </Grid>
   );
 };
-
 export default Analytics;

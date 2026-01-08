@@ -1,5 +1,7 @@
 import { mainDrawerWidth } from 'lib/constants';
 
+export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/metrics'; // Default to NestJS metrics base URL
+
 export const fontFamilies = ['Plus Jakarta Sans', 'Roboto', 'Inter', 'Poppins'] as const;
 
 export type FontFamily = (typeof fontFamilies)[number];

@@ -10,27 +10,24 @@ export interface ReactEchartProps extends BoxProps {
   option: EChartsReactProps['option'];
   echarts?: EChartsReactProps['echarts'];
 }
-
 const ReactEchart = ({ option, echarts, ...rest }: ReactEchartProps) => {
   const chartRef = useRef<ReactEChartsCore | null>(null);
   const theme = useTheme();
-
   useEffect(() => {
     return () => {
-      // Safely dispose of the ECharts instance only if it exists
       if (chartRef.current && typeof chartRef.current.getEchartsInstance === 'function') {
         const instance = chartRef.current.getEchartsInstance();
         if (instance && typeof instance.dispose === 'function') {
-          instance.dispose();
+          if (instance.getZr && instance.getZr()) {
+            instance.dispose();
+          }
         }
       }
     };
   }, []);
-
   const isTouchDevice = useMemo(() => {
     return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
   }, []);
-
   const defaultTooltip = useMemo(
     () => ({
       trigger: 'axis',
@@ -57,7 +54,6 @@ const ReactEchart = ({ option, echarts, ...rest }: ReactEchartProps) => {
     }),
     [theme, isTouchDevice],
   );
-
   return (
     <Box
       component={ReactEChartsCore}
@@ -67,9 +63,9 @@ const ReactEchart = ({ option, echarts, ...rest }: ReactEchartProps) => {
         ...option,
         tooltip: merge(defaultTooltip, option.tooltip),
       }}
+      sx={{ minHeight: 300 }}
       {...rest}
     />
   );
 };
-
 export default ReactEchart;

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Alert, Box, Button, Paper, TextField, Typography } from '@mui/material';
 import { supabase } from 'lib/supabase';
 import paths from 'routes/paths';
@@ -54,6 +54,9 @@ export default function Login() {
             Login
           </Button>
         </form>
+        <Typography variant="body2" align="center" sx={{ mt: 2 }}>
+          Don't have an account? <Link to={paths.signup}>Sign up</Link>
+        </Typography>
       </Paper>
     </Box>
   );

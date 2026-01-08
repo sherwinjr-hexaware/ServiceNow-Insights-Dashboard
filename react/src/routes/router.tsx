@@ -13,8 +13,8 @@ const UserList = lazy(() => import('pages/users/UserList'));
 const Starter = lazy(() => import('pages/others/Starter'));
 const Account = lazy(() => import('pages/others/Account'));
 const Login = lazy(() => import('pages/authentication/Login'));
-
 const Signup = lazy(() => import('pages/authentication/Signup'));
+const DynamicDashboard = lazy(() => import('pages/dashboard/DynamicDashboard')); // Import DynamicDashboard
 
 export const SuspenseOutlet = () => {
   const location = useLocation();
@@ -43,6 +43,7 @@ export const routes: RouteObject[] = [
           { path: paths.users, element: <UserList /> },
           { path: paths.account, element: <Account /> },
           { path: paths.starter, element: <Starter /> },
+          { path: `${paths.dashboard}/analytics/:uuid`, element: <DynamicDashboard /> }, // New route for dynamic dashboard
         ],
       },
       {

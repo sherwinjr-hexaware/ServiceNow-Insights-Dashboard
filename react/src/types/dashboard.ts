@@ -69,3 +69,24 @@ export interface ClientLocation {
   name: string;
   value: number;
 }
+
+// New interfaces for Dashboard and DashboardWidget
+export interface DashboardWidget {
+  id: string;
+  dashboard_id: string;
+  name: string;
+  widget_type: string;
+  config: Record<string, any>; // JSONB type in Supabase, maps to object in TS
+  position: Record<string, any>; // JSONB type in Supabase, maps to object in TS
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Dashboard {
+  id: string;
+  name: string;
+  description: string;
+  created_at: string;
+  updated_at: string;
+  widgets?: DashboardWidget[]; // Optional, will be present when fetching a single dashboard with widgets
+}

@@ -1,4 +1,5 @@
 import { MouseEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Divider,
@@ -21,6 +22,7 @@ const ProfileMenu = () => {
   const { user } = useAuth();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
   const handleOpen = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -31,6 +33,7 @@ const ProfileMenu = () => {
   const handleLogout = async () => {
     handleClose();
     await supabase.auth.signOut();
+    navigate('/auth/login');
   };
 
   const userInitial = user?.email?.[0].toUpperCase() || 'U';
